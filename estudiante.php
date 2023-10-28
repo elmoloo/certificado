@@ -1,4 +1,5 @@
-<?php include_once('config.php');
+<?php 
+require_once('cusuario.php');
 	include_once('navbar.php');
 ?>
 <!doctype html>
@@ -6,7 +7,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>PHP CRUD in Bootstrap with search and pagination</title>
+	<title>Listado de Estudiante</title>
 	
 	<link rel="shortcut icon" href="https://demo.learncodeweb.com/favicon.ico">
 	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.0/themes/smoothness/jquery-ui.css" type="text/css">
@@ -105,7 +106,7 @@
 		<div>
 			<table class="table table-striped table-bordered">
 				<thead>
-					<tr class="bg-primary text-white"> 
+					<tr class="bg-dark text-white"> 
 						<th>Id</th>
 						<th>Nombre</th>
 						<th>Apellido</th>
@@ -114,7 +115,7 @@
 						<th class="text-center">Action</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody style="cursor:pointer">
 					<?php 
 					if(count($userData)>0){
 						$s	=	'';

@@ -1,5 +1,5 @@
-<?php include_once('../config.php');
-include_once('../navbar.php');
+<?php
+require_once('../cusuario.php');
 
 if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 	extract($_REQUEST);
@@ -16,11 +16,12 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 	}else{
 		
 		$userCount	=	$db->getQueryCount('curso','id_curso');
-		$data	=	array(
+		$data	=	[
 						'id_institucion '=>$id_institucion ,
 						'id_coordinador '=>$id_coordinador ,
+						'id_facilitador'=>$id_facilitador ,
+						'id_rector'=>$id_rector ,
 						'nombre_cur'=>$nombre_cur,
-						'nombre_co'=>$nombre_co,
 						'contenido_cur'=>$contenido_cur,
 						'num_horas'=>$num_horas,
 						'tipo_curso'=>$tipo_curso,
@@ -29,10 +30,10 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 						'fecha_inicio'=>$fecha_inicio,
 						'fecha_fin'=>$fecha_fin,
 						'fecha_certificado'=>$fecha_certificado,
-						'desc_institucional'=>$desc_institucional,
+						'desc_cur'=>$desc_cur,
 
 
-					);
+					];
 		$insert	=	$db->insert('curso',$data);
 		if($insert){
 			header('location:../curso.php?msg=ras');
@@ -110,45 +111,30 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 
 
 <body>
-
+<?php include_once('navbar.php'); ?>
    	<div class="container">
 
 		<h1><a href="#">Añadir Curso</a></h1>
 
-		<?php
-
-		if(isset($_REQUEST['msg']) and $_REQUEST['msg']=="un"){
-
-			echo	'<div class="alert alert-danger"><i class="fa fa-exclamation-triangle"></i> User name is mandatory field!</div>';
-
-		}elseif(isset($_REQUEST['msg']) and $_REQUEST['msg']=="ue"){
-
-			echo	'<div class="alert alert-danger"><i class="fa fa-exclamation-triangle"></i> User email is mandatory field!</div>';
-
-		}elseif(isset($_REQUEST['msg']) and $_REQUEST['msg']=="up"){
-
-			echo	'<div class="alert alert-danger"><i class="fa fa-exclamation-triangle"></i> User phone is mandatory field!</div>';
-
-		}elseif(isset($_REQUEST['msg']) and $_REQUEST['msg']=="ras"){
-
-			echo	'<div class="alert alert-success"><i class="fa fa-thumbs-up"></i> Record added successfully!</div>';
-
-		}elseif(isset($_REQUEST['msg']) and $_REQUEST['msg']=="rna"){
-
-			echo	'<div class="alert alert-danger"><i class="fa fa-exclamation-triangle"></i> Record not added <strong>Please try again!</strong></div>';
-
-		}
-
-		?>
+		
 
 		<div class="card">
 
-			<div class="card-header"><i class="fa fa-fw fa-plus-circle"></i> <strong>Añade un nuevo curso</strong> <a href="../curso.php" class="float-right btn btn-dark btn-sm"><i class="fa fa-fw fa-globe"></i> Buscar Curso</a></div>
-
+			<div class="card-header"><i class="fa fa-fw fa-plus-circle"></i> <strong>Añade un nuevo curso</strong> <a href="../curso.php" class="float-right btn btn-dark btn-sm"><i class="fa fa-fw fa-globe"></i> Regresar</a></div>
 			<div class="card-body">
+				<?php
+				if(isset($_REQUEST['msg']) and $_REQUEST['msg']=="rds"){
+					echo	'<div class="alert alert-success"><i class="fa fa-thumbs-up"></i> El dato a sido eliminado correctamente!</div>';
+				}elseif(isset($_REQUEST['msg']) and $_REQUEST['msg']=="rus"){
+					echo	'<div class="alert alert-success"><i class="fa fa-thumbs-up"></i> El dato a sido actualizado correctamente!</div>';
+				}elseif(isset($_REQUEST['msg']) and $_REQUEST['msg']=="rnu"){
+					echo	'<div class="alert alert-warning"><i class="fa fa-exclamation-triangle"></i> No se realizo ningun cambio!</div>';
+				}elseif(isset($_REQUEST['msg']) and $_REQUEST['msg']=="rna"){
+					echo	'<div class="alert alert-danger"><i class="fa fa-exclamation-triangle"></i> There is some thing wrong <strong>Please try again!</strong></div>';
+				}
+				?>
 
 				
-
 				<div class="col-sm-6">
 
 					<h5 class="card-title">Todos los campos con <span class="text-danger">*</span> son obligatorios !</h5>
@@ -175,7 +161,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 
 							<label>Nombre de el Curso<span class="text-danger">*</span></label>
 
-							<input type="text" name="nombre_cur" id="nombre_cur" class="form-control" placeholder="Ingresa Nombre de el Curso" required>
+							<input type="text" onkeydown="return /[a-zA-ZñÑá-úÁ-Ú, ]/i.test(event.key)" name="nombre_cur" id="nombre_cur" class="form-control" placeholder="Ingresa Nombre de el Curso" required>
 
 						</div>
 
@@ -183,17 +169,59 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 
 							<label>Contenido del Curso <span class="text-danger">*</span></label>
 
-							<input type="text" name="contenido_cur" id="contenido_cur" class="form-control" placeholder="Ingresa  Contenido" required>
+							<input type="text" onkeydown="return /[a-zA-ZñÑá-úÁ-Ú, ]/i.test(event.key)" name="contenido_cur" id="contenido_cur" class="form-control" placeholder="Ingresa  Contenido" required>
 
 						</div>
 
 						<div class="form-group">
 
-							<label>Nombre de Coordinador<span class="text-danger">*</span></label>
-							<br>
-							<div> <a href="../add/add-coordinador.php" class="float-right btn btn-dark btn-sm"><i class="fa fa-fw fa-plus-circle"></i> Añadir Coordinador</a></div>
-							<input type="int" name="nombre_co" id="nombre_co" class="form-control" placeholder="Nombre coordinador" required>
+						<label for="id_coordinador">Coordinador <span class="text-danger">*</span> </label>
+							<?php 							
+								$consulta = $pdo->query("SELECT * FROM  coordinador ");	
+								$coordinador = $consulta->fetchAll(PDO::FETCH_OBJ);	
+								// print_r($especialidades);
+							?>
+							<select id="id_coordinador"name="id_coordinador"class="form-control"  required>
+								<option value="">Seleccione un Coordinador</option>
+								<?php foreach ($coordinador as $pro){ ?>								
+									<option  value="<?php echo $pro->id_coordinador?>"><?php echo $pro->nombre_co ?> <?php echo $pro->apellido_co?></option>
+								<?php } ?>
+								</select>						
+
 						</div>
+						<div class="form-group">
+
+						<label for="id_facilitador">Facilitador <span class="text-danger">*</span> </label>
+							<?php 							
+								$consulta2 = $pdo->query("SELECT * FROM  facilitador ");	
+								$facilitador = $consulta2->fetchAll(PDO::FETCH_OBJ);	
+								// print_r($especialidades);
+							?>
+							<select id="id_facilitador"name="id_facilitador"class="form-control"  required>
+								<option value="">Seleccione un Facilitador</option>
+								<?php foreach ($facilitador as $pro){ ?>								
+									<option  value="<?php echo $pro->id_facilitador?>"><?php echo $pro->nombre_fa ?> <?php echo $pro->apellido_fa?></option>
+								<?php } ?>
+								</select>						
+
+						</div>
+						<div class="form-group">
+
+						<label for="id_rector">Rector <span class="text-danger">*</span> </label>
+							<?php 							
+								$consulta3 = $pdo->query("SELECT * FROM  rector ");	
+								$rector = $consulta3->fetchAll(PDO::FETCH_OBJ);	
+								// print_r($especialidades);
+							?>
+							<select id="id_rector"name="id_rector"class="form-control"  required>
+								<option value="">Seleccione un Rector</option>
+								<?php foreach ($rector as $pro){ ?>								
+									<option  value="<?php echo $pro->id_rector?>"><?php echo $pro->nombre_re ?> <?php echo $pro->apellido_re?></option>
+								<?php } ?>
+								</select>						
+
+						</div>
+
 						<div class="form-group">
 
 							<label>Numero de Horas<span class="text-danger">*</span></label>
@@ -205,22 +233,19 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 
 							<label>Tipo de Curso <span class="text-danger">*</span></label>
 
-							<input type="text" name="tipo_curso" id="tipo_curso"  class="form-control" placeholder="Tipo de curso" required>
+							<input type="text" onkeydown="return /[a-zA-ZñÑá-úÁ-Ú, ]/i.test(event.key)" name="tipo_curso" id="tipo_curso"  class="form-control" placeholder="Tipo de curso" required>
 
 						</div>
+								
 						<div class="form-group">
-
-						<label > <span class="text-danger">*</span> Tipo de Certificado</label> <br> 
-						<div class="form-check form-check-inline">
- 					 <input class="form-check-input" type="radio" name="tipo_de_certificado" id="tipo_de_certificado" value="Aprobado">
- 					 <label class="form-check-label" for="inlineRadio1">Aprobado</label>
-					 </div>
-					 <div class="form-check form-check-inline">
- 					 <input class="form-check-input" type="radio" name="tipo_de_certificado" id="tipo_de_certificado" value="Asistido">
-  					 <label class="form-check-label" for="inlineRadio2">Asistido</label>
-					 </div><br>
-						<br>
-						</div>
+						<label for="genero">Tipo de Aprobacion<span class="text-danger">*</span></label>
+							<select id="tipo_aprobacion" name="tipo_aprobacion" class="form-control">
+							<option value="0"> Tipo de Aprobacion</option>
+ 								 <option value="Hombre">Aprobado</option>
+ 								 <option value="Mujer">Asistido</option>
+							
+							</select>
+							<br>
 						<div class="form-group">
 
 							<label>Duracion de Curso <span class="text-danger">*</span></label>
@@ -251,9 +276,9 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 						</div>
 						<div class="form-group">
 
-							<label>Descripcion Institucional  <span class="text-danger">*</span></label>
+							<label>Descripcion   <span class="text-danger">*</span></label>
 
-							<input type="text" name="desc_institucional" id="desc_institucional" class="form-control" placeholder="Describe Institucion" required>
+							<input type="text" onkeydown="return /[a-zA-ZñÑá-úÁ-Ú, ]/i.test(event.key)" name="desc_cur" id="desc_cur" class="form-control" placeholder="Describe el Curso " required>
 
 						</div>
 

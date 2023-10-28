@@ -1,5 +1,6 @@
-<?php include_once('../config.php');
-include_once('../navbar.php');
+<?php
+ require_once('../cusuario.php');
+
 
 if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 	extract($_REQUEST);
@@ -23,10 +24,10 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 		);
 		$insert	=	$db->insert('institucion',$data);
 		if($insert){
-			header('location:../admin/index.php?msg=ras');
+			header('location:../index.php?msg=ras');
 			exit;
 		}else{
-			header('location:../admin/index.php?msg=rna');
+			header('location:../index.php?msg=rna');
 			exit;
 		}
 	}
@@ -98,40 +99,26 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 
 
 <body>
-
+<?php include_once('navbar.php'); ?>
    	<div class="container">
 
 		<h1><a href="#">Añadir Institucion</a></h1>
 
 		<?php
-
-		if(isset($_REQUEST['msg']) and $_REQUEST['msg']=="un"){
-
-			echo	'<div class="alert alert-danger"><i class="fa fa-exclamation-triangle"></i> User name is mandatory field!</div>';
-
-		}elseif(isset($_REQUEST['msg']) and $_REQUEST['msg']=="ue"){
-
-			echo	'<div class="alert alert-danger"><i class="fa fa-exclamation-triangle"></i> User email is mandatory field!</div>';
-
-		}elseif(isset($_REQUEST['msg']) and $_REQUEST['msg']=="up"){
-
-			echo	'<div class="alert alert-danger"><i class="fa fa-exclamation-triangle"></i> User phone is mandatory field!</div>';
-
-		}elseif(isset($_REQUEST['msg']) and $_REQUEST['msg']=="ras"){
-
-			echo	'<div class="alert alert-success"><i class="fa fa-thumbs-up"></i> Record added successfully!</div>';
-
-		}elseif(isset($_REQUEST['msg']) and $_REQUEST['msg']=="rna"){
-
-			echo	'<div class="alert alert-danger"><i class="fa fa-exclamation-triangle"></i> Record not added <strong>Please try again!</strong></div>';
-
-		}
-
-		?>
+				if(isset($_REQUEST['msg']) and $_REQUEST['msg']=="rds"){
+					echo	'<div class="alert alert-success"><i class="fa fa-thumbs-up"></i> El dato a sido eliminado correctamente!</div>';
+				}elseif(isset($_REQUEST['msg']) and $_REQUEST['msg']=="rus"){
+					echo	'<div class="alert alert-success"><i class="fa fa-thumbs-up"></i> El dato a sido actualizado correctamente!</div>';
+				}elseif(isset($_REQUEST['msg']) and $_REQUEST['msg']=="rnu"){
+					echo	'<div class="alert alert-warning"><i class="fa fa-exclamation-triangle"></i> No se realizo ningun cambio!</div>';
+				}elseif(isset($_REQUEST['msg']) and $_REQUEST['msg']=="rna"){
+					echo	'<div class="alert alert-danger"><i class="fa fa-exclamation-triangle"></i> There is some thing wrong <strong>Please try again!</strong></div>';
+				}
+				?>
 
 		<div class="card">
 
-			<div class="card-header"><i class="fa fa-fw fa-plus-circle"></i> <strong>Añade Institucion</strong> <a href="../admin/index.php" class="float-right btn btn-dark btn-sm"><i class="fa fa-fw fa-globe"></i> Buscar Institucion</a></div>
+			<div class="card-header"><i class="fa fa-fw fa-plus-circle"></i> <strong>Añade Institucion</strong> <a href="../index.php" class="float-right btn btn-dark btn-sm"><i class="fa fa-fw fa-globe"></i> Regresar</a></div>
 
 			<div class="card-body">
 
@@ -146,7 +133,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 						<div class="form-group">
 
 							<label>Nombre<span class="text-danger">*</span></label>
-							<input type="text" name="nombre_inst" id="nombre_inst" class="form-control" placeholder="Ingrese el nombre de la institucion"   required >
+							<input type="text" onkeydown="return /[a-zA-ZñÑá-úÁ-Ú, ]/i.test(event.key)" name="nombre_inst" id="nombre_inst" class="form-control" placeholder="Ingrese el nombre de la institucion"   required >
 							
 						</div>
 
@@ -154,14 +141,14 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 
 							<label>Descripcion <span class="text-danger">*</span></label>
 
-							<input type="text" name="descripcion_inst" id="descripcion_inst" class="form-control" placeholder="Ingresa Descripcion" pattern="[Aa-Zz-Ññ]+" required>
+							<input type="text" onkeydown="return /[a-zA-ZñÑá-úÁ-Ú, ]/i.test(event.key)" name="descripcion_inst" onkeydown="return /[a-zA-ZñÑá-úÁ-Ú, ]/i.test(event.key)"  id="descripcion_inst" class="form-control" placeholder="Ingresa Descripcion"  required>
 
 						</div>
 						<div class="form-group">
 
 							<label>Datos del Contacto<span class="text-danger">*</span></label>
 
-							<input type="number" name="datos_contacto" id="datos_contacto" class="form-control" placeholder="Ingresa Contacto" pattern="[1234567890]+" required>
+							<input type="number" name="datos_contacto" id="datos_contacto" class="form-control" placeholder="Ingresa Contacto" pattern="\([0-9]{3}\) [0-9]{2}[ -][0-9]{3}[ -][0-9]{4}" required>
 
 						</div>
 						<div class="form-group">
@@ -241,5 +228,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
     
 
 </body>
-
+<footer>
+<?php include_once('../footer.php');	?>
+</footer>
 </html>

@@ -1,10 +1,11 @@
-<?php include_once('../config.php');
-include_once('../navbar.php');
+<?php 
+require_once('../cusuario.php');
+
 if(isset($_REQUEST['editId']) and $_REQUEST['editId']!=""){
 	$row	=	$db->getAllRecords('ciudad','*',' AND id_ciudad="'.$_REQUEST['editId'].'"');
 }
 
-if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
+ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 	extract($_REQUEST);
 	if($nombre_ciud==""){
 		header('location:'.$_SERVER['PHP_SELF'].'?msg=un&editId='.$_REQUEST['editId']);
@@ -44,7 +45,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 </head>
 
 <body>
-	
+	<?php include_once('navbar.php'); ?>
 	<div class="bg-light border-bottom shadow-sm sticky-top">
 		<div class="container">
 			<header class="blog-header py-1">
@@ -69,7 +70,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 		}
 		?>
 		<div class="card">
-			<div class="card-header"><i class="fa fa-fw fa-plus-circle"></i> <strong>Editar Ciudad </strong> <a href="../estudiante.php" class="float-right btn btn-dark btn-sm"><i class="fa fa-fw fa-globe"></i> Buscar Estudiante</a></div>
+			<div class="card-header"><i class="fa fa-fw fa-plus-circle"></i> <strong>Editar Ciudad </strong> <a href="../add/add-ciudad.php" class="float-right btn btn-dark btn-sm"><i class="fa fa-fw fa-globe"></i> Regresar</a></div>
 			<div class="card-body">
 				
 				<div class="col-sm-6">
@@ -98,7 +99,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 					
 						<div class="form-group">
 							<input type="hidden" name="editId" id="editId" value="<?php echo $_REQUEST['editId']?>">
-							<button type="submit" name="submit" value="submit" id="submit" class="btn btn-primary"><i class="fa fa-fw fa-edit"></i> Editar Ciudad</button>
+							<button type="submit" name="submit" value="submit" id="submit" class="btn btn-primary"><i class="fa fa-fw fa-edit"></i> Guardar</button>
 						</div>
 					</form>
 				</div>

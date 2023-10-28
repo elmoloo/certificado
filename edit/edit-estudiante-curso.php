@@ -1,31 +1,31 @@
-<?php include_once('../config.php');
-include_once('../navbar.php');
+<?php 
+require_once('../cusuario.php');
+
 if(isset($_REQUEST['editId']) and $_REQUEST['editId']!=""){
-	$row	=	$db->getAllRecords('estudiante-curso','*',' AND id_estudiante-curso="'.$_REQUEST['editId'].'"');
+	$row	=	$db->getAllRecords('estudiante_curso','*',' AND id_estudiante_curso="'.$_REQUEST['editId'].'"');
 }
 
 if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 	extract($_REQUEST);
-	if($nombre_prov==""){
+	if($aprobado==""){
 		header('location:'.$_SERVER['PHP_SELF'].'?msg=un&editId='.$_REQUEST['editId']);
 		exit;
 	}
 	$data	=	array(
-					'Id'=>$Id,
-					'id_curso'=>$id_curso,
-					'id_cuidad'=>$id_cuidad,
+					'id_estudiante'=>$id_estudiante,
+					//'id_curso'=>$id_curso,
+					'id_institucion'=>$id_institucion,
 					'aprobado'=>$aprobado,
-					'asistio'=>$asistio,
-					'nota'=>$nota,
+					
 					
 					
 					);
-	$update	=	$db->update('estudiante-curso',$data,array('id_estudiante-curso'=>$editId));
+	$update	=	$db->update('estudiante_curso',$data,array('id_estudiante_curso'=>$editId));
 	if($update){
-		header('location:estudiante-curso.php?msg=rus');
+		header("location:/mariano_certificado/estudiante_curso.php?msg=rus&editId=".$_REQUEST['editId']."&id_curso=".$_REQUEST['id_curso']."&id_coordinador=".$_REQUEST['id_coordinador']."&id_facilitador=".$_REQUEST['id_facilitador']."&id_rector=".$_REQUEST['id_rector']);
 		exit;
 	}else{
-		header('location:estudiante-curso.php?msg=rnu');
+		header("location:/mariano_certificado/estudiante_curso.php?msg=rnu&editId=".$_REQUEST['editId']."&id_curso=".$_REQUEST['id_curso']."&id_coordinador=".$_REQUEST['id_coordinador']."&id_facilitador=".$_REQUEST['id_facilitador']."&id_rector=".$_REQUEST['id_rector']);
 		exit;
 	}
 }
@@ -35,7 +35,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>Editar Estudiante de un Curso </title>
+	<title>Edita  </title>
 	
 	<link rel="shortcut icon" href="https://demo.learncodeweb.com/favicon.ico">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
@@ -48,7 +48,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 </head>
 
 <body>
-	
+<?php include_once('navbar.php');?>
 	<div class="bg-light border-bottom shadow-sm sticky-top">
 		<div class="container">
 			<header class="blog-header py-1">
@@ -58,7 +58,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 	
 	
    	<div class="container">
-		<h1><a href="#">Editar </a></h1>
+		<h1><a href="#">Editar</a></h1>
 		<?php
 		if(isset($_REQUEST['msg']) and $_REQUEST['msg']=="un"){
 			echo	'<div class="alert alert-danger"><i class="fa fa-exclamation-triangle"></i> User name is mandatory field!</div>';
@@ -73,34 +73,65 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 		}
 		?>
 		<div class="card">
-			<div class="card-header"><i class="fa fa-fw fa-plus-circle"></i> <strong>Editar Provincia </strong> <a href="../estudiante.php" class="float-right btn btn-dark btn-sm"><i class="fa fa-fw fa-globe"></i> Buscar Estudiante</a></div>
+			<div class="card-header"><i class="fa fa-fw fa-plus-circle"></i> <strong>Editar  </strong> <a href="/mariano_certificado/curso.php" class="float-right btn btn-dark btn-sm"><i class="fa fa-fw fa-globe"></i> Regresar a Curso</a></div>
 			<div class="card-body">
 				
 				<div class="col-sm-6">
 					<h5 class="card-title">Todos los campos con  <span class="text-danger">*</span> son obligatorios!</h5>
 					<form method="post">
-						
 						<div class="form-group">
-							<label>Pais <span class="text-danger">*</span></label>
+								
+						<div class="form-group">
+							<label>Selecione Estudiante <span class="text-danger">*</span></label>
 
-							<select id="id_pais" name="id_pais" class="form-control">
+							<select id="id_estudiante" name="id_estudiante" class="form-control">
 								<?php 
-									$consulta = $pdo->query("SELECT * FROM  pais");	
-									$provincia = $consulta->fetchAll(PDO::FETCH_OBJ);	
-									foreach ($provincia as $pro){ 
-										if($pro->id_pais==$row[0]['id_pais'])					
-											echo "<option  value='".$pro->id_pais."' selected>".$pro->nombre_pais."</option>";
+									$consulta = $pdo->query("SELECT * FROM  estudiante");	
+									$estudiant = $consulta->fetchAll(PDO::FETCH_OBJ);	
+									
+									foreach ($estudiant as $pro){ 
+										if($pro->id_estudiante==$row[0]['id_estudiante'])					
+											echo "<option  value='".$pro->id_estudiante."' selected>".$pro->nombre_es."\n".$pro->apellido_es."</option>";
 										else
-											echo "<option  value='".$pro->id_pais."' >".$pro->nombre_pais."</option>";
+											echo "<option  value='".$pro->id_estudiante."' >".$pro->nombre_es."\n".$pro->apellido_es."</option>";
 																	} ?>
 							</select>						
 
 						</div>
 
+							
+						<div class="form-group">
+							<label>Seleccione Institucion<span class="text-danger">*</span></label>
+
+							<select id="id_institucion" name="id_institucion" class="form-control">
+								<?php 
+									$consulta = $pdo->query("SELECT * FROM  institucion");	
+									$instituc = $consulta->fetchAll(PDO::FETCH_OBJ);	
+									
+									foreach ($instituc as $pro){ 
+										if($pro->id_institucion==$row[0]['id_institucion'])					
+											echo "<option  value='".$pro->id_institucion."' selected>".$pro->nombre_inst."</option>";
+										else
+											echo "<option  value='".$pro->id_institucion."' >".$pro->nombre_inst."</option>";
+																	} ?>
+							</select>						
+
+						</div>
+
+
+							<label>Seleccione Aprobacion <span class="text-danger">*</span></label>
+							<input type="text" onkeydown="return /[a-zA-ZñÑá-úÁ-Ú, ]/i.test(event.key)" name="aprobado" id="aprobado" class="form-control" value="<?php echo $row[0]['aprobado']; ?>" placeholder="Selecione " required>
+						</div>
+					
 					
 						<div class="form-group">
+							<input type="hidden" name="id_curso" id="id_curso" value="<?php echo $_REQUEST['id_curso']?>">
+							<input type="hidden" name="id_rector" id="id_rector" value="<?php echo $_REQUEST['id_rector']?>">
+							<input type="hidden" name="id_coordinador" id="id_coordinador" value="<?php echo $_REQUEST['id_coordinador']?>">
+							<input type="hidden" name="id_facilitador" id="id_facilitador" value="<?php echo $_REQUEST['id_facilitador']?>">
 							<input type="hidden" name="editId" id="editId" value="<?php echo $_REQUEST['editId']?>">
-							<button type="submit" name="submit" value="submit" id="submit" class="btn btn-primary"><i class="fa fa-fw fa-edit"></i> Editar Provincia</button>
+
+							<button type="submit" name="submit" value="submit" id="submit" class="btn btn-primary"><i class="fa fa-fw fa-edit"></i>Guardar</button>
 						</div>
 					</form>
 				</div>
@@ -114,4 +145,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
     
 </body>
+<footer>
+<?php include_once('../footer.php');	?>
+</footer>
 </html>

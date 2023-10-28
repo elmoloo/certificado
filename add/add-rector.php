@@ -1,35 +1,37 @@
-<?php include_once('../config.php');
-include_once('../navbar.php');
+<?php 
+require_once('../cusuario.php');
+
 
 if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 	extract($_REQUEST);
-	if($cedula_co==""){
+	if($cedula_re==""){
 		header('location:'.$_SERVER['PHP_SELF'].'?msg=un');
 		exit;
-	}elseif($nombre_co==""){
+	}elseif($nombre_re==""){
 		header('location:'.$_SERVER['PHP_SELF'].'?msg=ue');
 		exit;
-	}elseif($apellido_co==""){
+	}elseif($apellido_re==""){
 		header('location:'.$_SERVER['PHP_SELF'].'?msg=up');
 		exit;
 	}else{
 		
 		$userCount	=	$db->getQueryCount('rector','id_rector');
 		$data	=	array(
-			            'id_rector'=>$id_rector,
+			            
 						'cedula_re'=>$cedula_re,
 						'nombre_re'=>$nombre_re,
 						'apellido_re'=>$apellido_re,
+						'imagen_re'=>$imagen_re,
 						
 						
 						
 					);
 		$insert	=	$db->insert('rector',$data);
 		if($insert){
-			header('location:../rector.php?msg=ras');
+			header('location:add-rector.php?msg=ras');
 			exit;
 		}else{
-			header('location:../rector.php?msg=rna');
+			header('location:add-rector.php?msg=rna');
 			exit;
 		}
 	}
@@ -46,7 +48,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-	<title>PHP CRUD in Bootstrap 4 with search functionality</title>
+	<title>Ficheros</title>
 
 	
 
@@ -101,44 +103,28 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 
 
 <body>
-
+<?php include_once('navbar.php'); ?>
    	<div class="container">
 
 		<h1><a href="#">Añadir Rector</a></h1>
 
-		<?php
-
-		if(isset($_REQUEST['msg']) and $_REQUEST['msg']=="un"){
-
-			echo	'<div class="alert alert-danger"><i class="fa fa-exclamation-triangle"></i> User name is mandatory field!</div>';
-
-		}elseif(isset($_REQUEST['msg']) and $_REQUEST['msg']=="ue"){
-
-			echo	'<div class="alert alert-danger"><i class="fa fa-exclamation-triangle"></i> User email is mandatory field!</div>';
-
-		}elseif(isset($_REQUEST['msg']) and $_REQUEST['msg']=="up"){
-
-			echo	'<div class="alert alert-danger"><i class="fa fa-exclamation-triangle"></i> User phone is mandatory field!</div>';
-
-		}elseif(isset($_REQUEST['msg']) and $_REQUEST['msg']=="ras"){
-
-			echo	'<div class="alert alert-success"><i class="fa fa-thumbs-up"></i> Record added successfully!</div>';
-
-		}elseif(isset($_REQUEST['msg']) and $_REQUEST['msg']=="rna"){
-
-			echo	'<div class="alert alert-danger"><i class="fa fa-exclamation-triangle"></i> Record not added <strong>Please try again!</strong></div>';
-
-		}
-
-		?>
-
+		
 		<div class="card">
 
-			<div class="card-header"><i class="fa fa-fw fa-plus-circle"></i> <strong>Añade Rector</strong> <a href="../add/add-curso.php" class="float-right btn btn-dark btn-sm"><i class="fa fa-fw fa-globe"></i> Regresar</a></div>
+			<div class="card-header"><i class="fa fa-fw fa-plus-circle"></i> <strong>Añade Rector</strong> </div>
 
 			<div class="card-body">
-
-				
+				<?php
+				if(isset($_REQUEST['msg']) and $_REQUEST['msg']=="rds"){
+					echo	'<div class="alert alert-success"><i class="fa fa-thumbs-up"></i> El dato a sido eliminado correctamente!</div>';
+				}elseif(isset($_REQUEST['msg']) and $_REQUEST['msg']=="rus"){
+					echo	'<div class="alert alert-success"><i class="fa fa-thumbs-up"></i> El dato a sido actualizado correctamente!</div>';
+				}elseif(isset($_REQUEST['msg']) and $_REQUEST['msg']=="rnu"){
+					echo	'<div class="alert alert-warning"><i class="fa fa-exclamation-triangle"></i> No se realizo ningun cambio!</div>';
+				}elseif(isset($_REQUEST['msg']) and $_REQUEST['msg']=="rna"){
+					echo	'<div class="alert alert-danger"><i class="fa fa-exclamation-triangle"></i> There is some thing wrong <strong>Please try again!</strong></div>';
+				}
+				?>
 
 				<div class="col-sm-6">
 
@@ -150,7 +136,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 
 							<label>Cedula<span class="text-danger">*</span></label>
 
-							<input type="text" name="cedula_co" id="cedula_co" class="form-control" placeholder="Ingresa Cedula" required>
+							<input type="number" name="cedula_re" id="cedula_re" class="form-control" placeholder="Ingresa Cedula" required>
 
 						</div>
 
@@ -158,23 +144,22 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 
 							<label>Nombre <span class="text-danger">*</span></label>
 
-							<input type="text" name="nombre_co" id="nombre_co" class="form-control" placeholder="Ingresa Nombre" required>
+							<input type="text" onkeydown="return /[a-zA-ZñÑá-úÁ-Ú, ]/i.test(event.key)" name="nombre_re" id="nombre_re" class="form-control" placeholder="Ingresa Nombre" required>
 
 						</div>
 						<div class="form-group">
 
 							<label>Apellido<span class="text-danger">*</span></label>
 
-							<input type="text" name="apellido_co" id="apellido_co" class="form-control" placeholder="Ingresa Apellido" required>
+							<input type="text" onkeydown="return /[a-zA-ZñÑá-úÁ-Ú, ]/i.test(event.key)" name="apellido_re" id="apellido_re" class="form-control" placeholder="Ingresa Apellido" required>
 
 						</div>
-						
-
-
+	
+<br>
 				
 						<div class="form-group">
 
-							<button type="submit" name="submit" value="submit" id="submit" class="btn btn-primary"><i class="fa fa-fw fa-plus-circle"><a href="../add/add-curso.php"></i> Añadir Rector </a></button>
+						<button type="submit" name="submit" value="submit" id="submit" class="btn btn-primary"><i class="fa fa-fw fa-plus-circle"> </i> Añadir Rector</button>
 
 						</div>
 
@@ -187,6 +172,69 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 		</div>
 
 	</div>
+	<?php
+	$condition	=	'';
+	if(isset($_REQUEST['cedula_re']) and $_REQUEST['cedula_re']!=""){
+		$condition	.=	' AND cedula_re LIKE "%'.$_REQUEST['cedula_re'].'%" ';
+	}
+	if(isset($_REQUEST['nombre_re']) and $_REQUEST['nombre_re']!=""){
+		$condition	.=	' AND nombre_re LIKE "%'.$_REQUEST['nombre_re'].'%" ';
+	}
+	if(isset($_REQUEST['apellido_re']) and $_REQUEST['apellido_re']!=""){
+		$condition	.=	' AND apellido_re LIKE "%'.$_REQUEST['apellido_re'].'%" ';
+	}
+	if(isset($_REQUEST['dt']) and $_REQUEST['dt']!=""){
+
+		$condition	.=	' AND DATE(dt)<="'.$_REQUEST['dt'].'" ';
+
+	}
+	
+	$userData	=	$db->getAllRecords('rector','*',$condition,'ORDER BY id_rector');
+?>
+
+	<div>
+	<div class="container">
+			<table class="table table-striped table-bordered">
+				<thead>
+					<tr class="bg-dark text-white">
+						<th>ID</th>
+						<th>Cedula</th>
+						<th>Nombre</th>
+						<th>Apellido</th>
+						<th>Firma</th>
+						<th class="text-center">Accion</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php 
+					if(count($userData)>0){
+						$s	=	'';
+						foreach($userData as $val){
+							$s++;
+					?>
+					<tr>
+						<td><?php echo $s;?></td>
+						<td><?php echo $val['cedula_re'];?></td>
+						<td><?php echo $val['nombre_re'];?></td>
+						<td><?php echo $val['apellido_re'];?></td>
+						<td><?php echo $val['imagen_re'];?></td>
+						<td align="center">
+
+							<a href="../edit/edit-rector.php?editId=<?php echo $val['id_rector'];?>" class="text-primary"><i class="fa fa-fw fa-edit"></i> Editar</a> | 
+							<a href="../delete/delete-rector.php?delId=<?php echo $val['id_rector'];?>"  class="text-danger" onClick="return confirm('Are you sure to delete this user?');"><i class="fa fa-fw fa-trash"></i> Eliminar</a>
+						</td>
+
+					</tr>
+					<?php 
+						}
+					}else{
+					?>
+					<tr><td colspan="4" align="center">No Record(s) Found!</td></tr>
+					<?php } ?>
+				</tbody>
+			</table>
+		</div>
+
 
     
 

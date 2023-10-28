@@ -1,21 +1,14 @@
-<?php include_once('../config.php');
-include_once('../navbar.php');
+<?php 
+require_once('../cusuario.php');
+
+
 if(isset($_REQUEST['editId']) and $_REQUEST['editId']!=""){
 	$row	=	$db->getAllRecords('institucion','*',' AND id_institucion="'.$_REQUEST['editId'].'"');
 }
 
 if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 	extract($_REQUEST);
-	if($nombre_inst==""){
-		header('location:'.$_SERVER['PHP_SELF'].'?msg=un&editId='.$_REQUEST['editId']);
-		exit;
-	}elseif($descripcion_inst==""){
-		header('location:'.$_SERVER['PHP_SELF'].'?msg=ue&editId='.$_REQUEST['editId']);
-		exit;
-	}elseif($datos_contacto==""){
-		header('location:'.$_SERVER['PHP_SELF'].'?msg=up&editId='.$_REQUEST['editId']);
-		exit;
-	}
+
 	$data	=	array(
 					'nombre_inst'=>$nombre_inst,
 					'descripcion_inst'=>$descripcion_inst,
@@ -25,10 +18,10 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 					);
 	$update	=	$db->update('institucion',$data,array('id_institucion'=>$editId));
 	if($update){
-		header('location: ../index.php?msg=rus');
+		header('location:../index.php?msg=rus');
 		exit;
 	}else{
-		header('location: ../index.php?msg=rnu');
+		header('location:../index.php?msg=rnu');
 		exit;
 	}
 }
@@ -38,7 +31,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>Edita Institucion </title>
+	<title>Editar Institucion </title>
 	
 	<link rel="shortcut icon" href="https://demo.learncodeweb.com/favicon.ico">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
@@ -51,7 +44,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 </head>
 
 <body>
-	
+<?php  include_once('navbar.php');?>
 	<div class="bg-light border-bottom shadow-sm sticky-top">
 		<div class="container">
 			<header class="blog-header py-1">
@@ -76,7 +69,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 		}
 		?>
 		<div class="card">
-			<div class="card-header"><i class="fa fa-fw fa-plus-circle"></i> <strong>Editar Institucion </strong> <a href="../admin/index.php" class="float-right btn btn-dark btn-sm"><i class="fa fa-fw fa-globe"></i> Buscar Institucion </a></div>
+			<div class="card-header"><i class="fa fa-fw fa-plus-circle"></i> <strong>Editar Institucion </strong> <a href="../index.php" class="float-right btn btn-dark btn-sm"><i class="fa fa-fw fa-globe"></i> Regresar </a></div>
 			<div class="card-body">
 				
 				<div class="col-sm-6">
@@ -100,7 +93,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 						</div>
 						<div class="form-group">
 							<input type="hidden" name="editId" id="editId" value="<?php echo $_REQUEST['editId']?>">
-							<button type="submit" name="submit" value="submit" id="submit" class="btn btn-primary"><i class="fa fa-fw fa-edit"></i> Editar Institucion</button>
+							<button type="submit" name="submit" value="submit" id="submit" class="btn btn-primary"><i class="fa fa-fw fa-edit"></i> Guardar</button>
 						</div>
 					</form>
 				</div>
@@ -113,4 +106,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
     
 </body>
+<footer>
+<?php include_once('../footer.php');	?>
+</footer>
 </html>

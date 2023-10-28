@@ -1,5 +1,6 @@
-<?php include_once('../config.php');
-include_once('../navbar.php');
+<?php
+ require_once('../cusuario.php');
+
 if(isset($_REQUEST['editId']) and $_REQUEST['editId']!=""){
 	$row	=	$db->getAllRecords('estudiante','*',' AND id_estudiante="'.$_REQUEST['editId'].'"');
 }
@@ -20,6 +21,14 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 					'cedula_es'=>$cedula_es,
 					'nombre_es'=>$nombre_es,
 					'apellido_es'=>$apellido_es,
+					'id_especialidad'=>$id_especialidad,
+					'id_periodoac'=>$id_periodoac,
+					'genero'=>$genero,
+					'fecha_nacimiento'=>$fecha_nacimiento,
+					'id_pais'=>$id_pais,
+					'id_provincia'=>$id_provincia,
+					'id_canton'=>$id_canton,
+					'id_ciudad'=>$id_ciudad,
 					'telefono_es'=>$telefono_es,
 					'correo_es'=>$correo_es,
 					
@@ -39,7 +48,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>Edita tu curso </title>
+	<title>Editar Estudiante </title>
 	
 	<link rel="shortcut icon" href="https://demo.learncodeweb.com/favicon.ico">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
@@ -52,7 +61,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 </head>
 
 <body>
-	
+<?php include_once('navbar.php');?>
 	<div class="bg-light border-bottom shadow-sm sticky-top">
 		<div class="container">
 			<header class="blog-header py-1">
@@ -77,7 +86,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 		}
 		?>
 		<div class="card">
-			<div class="card-header"><i class="fa fa-fw fa-plus-circle"></i> <strong>Editar Estudiante </strong> <a href="../estudiante.php" class="float-right btn btn-dark btn-sm"><i class="fa fa-fw fa-globe"></i> Buscar Estudiante</a></div>
+			<div class="card-header"><i class="fa fa-fw fa-plus-circle"></i> <strong>Editar Estudiante </strong> <a href="../estudiante.php" class="float-right btn btn-dark btn-sm"><i class="fa fa-fw fa-globe"></i> Regresar</a></div>
 			<div class="card-body">
 				
 				<div class="col-sm-6">
@@ -95,7 +104,120 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 							<label>Apellido <span class="text-danger">*</span></label>
 							<input type="text" name="apellido_es" id="apellido_es"  class="form-control" value="<?php echo $row[0]['apellido_es']; ?>" placeholder="Ingresa Apellido" required>
 						</div>
+
+						<div class="form-group">
+							<label>Especialidad <span class="text-danger">*</span></label>
+
+							<select id="id_especialidad" name="id_especialidad" class="form-control">
+								<?php 
+									$consulta = $pdo->query("SELECT * FROM  especialidad");	
+									$especialidad = $consulta->fetchAll(PDO::FETCH_OBJ);	
+									foreach ($especialidad as $pro){ 
+										if($pro->id_especialidad==$row[0]['id_especialidad'])					
+											echo "<option  value='".$pro->id_especialidad."' selected>".$pro->nombre."</option>";
+										else
+											echo "<option  value='".$pro->id_especialidad."' >".$pro->nombre."</option>";
+																	} ?>
+							</select>						
+
+						</div>
+					
+						<div class="form-group">
+							<label>Periodo Academico  <span class="text-danger">*</span></label>
+
+							<select id="id_periodoac" name="id_periodoac" class="form-control">
+								<?php 
+									$consulta = $pdo->query("SELECT * FROM  periodo_academico");	
+									$periodo = $consulta->fetchAll(PDO::FETCH_OBJ);	
+									foreach ($periodo as $pro){ 
+										if($pro->id_periodoac==$row[0]['id_periodoac'])					
+											echo "<option  value='".$pro->id_periodoac."' selected>".$pro->nombre_periac."</option>";
+										else
+											echo "<option  value='".$pro->id_periodoac."' >".$pro->nombre_periac."</option>";
+																	} ?>
+							</select>						
+
+						</div>
+						<div class="form-group">
+						<label>Genero <span class="text-danger">*</span></label>
+						<input type="text" name="genero" id="genero" class="form-control" value="<?php echo $row[0]['genero']; ?>" placeholder="Ingresa Genero" required>
+						</div>
+
+						<div class="form-group">
+
+							<label>Fecha  de Nacimiento <span class="text-danger">*</span></label>
+
+							<input type="date" name="fecha_nacimiento" id="fecha_nacimiento" maxlength="10" class="form-control" value="<?php echo $row[0]['fecha_nacimiento']; ?>" placeholder="Ingrese fecha de nacimiento" required>
+
+						</div>
+
+
+						<div class="form-group">
+							<label>Pais  <span class="text-danger">*</span></label>
+
+							<select id="id_pais" name="id_pais" class="form-control">
+								<?php 
+									$consulta = $pdo->query("SELECT * FROM  pais");	
+									$pais = $consulta->fetchAll(PDO::FETCH_OBJ);	
+									foreach ($pais as $pro){ 
+										if($pro->id_pais==$row[0]['id_pais'])					
+											echo "<option  value='".$pro->id_pais."' selected>".$pro->nombre_pais."</option>";
+										else
+											echo "<option  value='".$pro->id_pais."' >".$pro->nombre_pais."</option>";
+																	} ?>
+							</select>						
+
+						</div>
 						
+						<div class="form-group">
+							<label>Provincia  <span class="text-danger">*</span></label>
+
+							<select id="id_provincia" name="id_provincia" class="form-control">
+								<?php 
+									$consulta = $pdo->query("SELECT * FROM  provincia");	
+									$provincia = $consulta->fetchAll(PDO::FETCH_OBJ);	
+									foreach ($provincia as $pro){ 
+										if($pro->id_provincia==$row[0]['id_provincia'])					
+											echo "<option  value='".$pro->id_provincia."' selected>".$pro->nombre_prov."</option>";
+										else
+											echo "<option  value='".$pro->id_provincia."' >".$pro->nombre_prov."</option>";
+																	} ?>
+							</select>						
+
+						</div>
+						
+						<div class="form-group">
+							<label> Canton <span class="text-danger">*</span></label>
+							<select id="id_canton" name="id_canton" class="form-control">
+								<?php 
+									$consulta = $pdo->query("SELECT * FROM  canton");	
+									$canton = $consulta->fetchAll(PDO::FETCH_OBJ);	
+									foreach ($canton as $pro){ 
+										if($pro->id_canton==$row[0]['id_canton'])					
+											echo "<option  value='".$pro->id_canton."' selected>".$pro->nombre_cant."</option>";
+										else
+											echo "<option  value='".$pro->id_canton."' >".$pro->nombre_cant."</option>";
+																	} ?>
+							</select>						
+
+						</div>
+						
+						<div class="form-group">
+							<label>Ciudad  <span class="text-danger">*</span></label>
+
+							<select id="id_ciudad" name="id_ciudad" class="form-control">
+								<?php 
+									$consulta = $pdo->query("SELECT * FROM  ciudad ");	
+									$ciudad = $consulta->fetchAll(PDO::FETCH_OBJ);	
+									foreach ($ciudad as $pro){ 
+										if($pro->id_ciudad==$row[0]['id_ciudad'])					
+											echo "<option  value='".$pro->id_ciudad."' selected>".$pro->nombre_ciud."</option>";
+										else
+											echo "<option  value='".$pro->id_ciudad."' >".$pro->nombre_ciud."</option>";
+																	} ?>
+							</select>						
+
+						</div>
 						<div class="form-group">
 							<label>Telefono<span class="text-danger">*</span></label>
 							<input type="int" name="telefono_es" id="telefono_es" class="form-control" value="<?php echo $row[0]['telefono_es']; ?>" placeholder="Ingresa telefono" required>
@@ -106,7 +228,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 						</div>
 						<div class="form-group">
 							<input type="hidden" name="editId" id="editId" value="<?php echo $_REQUEST['editId']?>">
-							<button type="submit" name="submit" value="submit" id="submit" class="btn btn-primary"><i class="fa fa-fw fa-edit"></i> Editar Estudiante</button>
+							<button type="submit" name="submit" value="submit" id="submit" class="btn btn-primary"><i class="fa fa-fw fa-edit"></i> Guardar</button>
 						</div>
 					</form>
 				</div>

@@ -1,5 +1,5 @@
 <?php
- include_once('config.php');
+ require_once('cusuario.php');
 include_once('navbar.php');
 
 if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){

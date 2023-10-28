@@ -1,12 +1,17 @@
-<?php include_once('config.php');
-	include_once('navbar.php');
+<?php 
+	require_once('cusuario.php');
+	
+	
+
+	
+
 ?>
 <!doctype html>
 <html lang="en-US" xmlns:fb="https://www.facebook.com/2008/fbml" xmlns:addthis="https://www.addthis.com/help/api-spec"  prefix="og: http://ogp.me/ns#" class="no-js">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>PHP CRUD in Bootstrap with search and pagination</title>
+	<title>Listado de Curso </title>
 	
 	<link rel="shortcut icon" href="https://demo.learncodeweb.com/favicon.ico">
 	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.0/themes/smoothness/jquery-ui.css" type="text/css">
@@ -20,6 +25,7 @@
 </head>
 
 <body>
+<?php include_once('navbar.php');?>
 	
 			<header class="blog-header py-1">
 			</header>
@@ -109,7 +115,7 @@
 		<div>
 			<table class="table table-striped table-bordered">
 				<thead>
-					<tr class="bg-primary text-white">
+					<tr class="bg-dark text-white">
 						<th>id#</th>
 						<th>Nombre</th>
 						<th>Contenido</th>
@@ -119,7 +125,7 @@
 						<th class="text-center">Action</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody style="cursor:pointer">
 					<?php 
 					if(count($userData)>0){
 						$s	=	'';
@@ -131,12 +137,25 @@
 						<td><?php echo $val['nombre_cur'];?></td>
 						<td><?php echo $val['contenido_cur'];?></td>
 						<td><?php echo $val['num_horas'];?></td>
-						<td><?php echo $val['nombre_co'];?></td>
+						<td>
+						<?php 
+							
+							$consulta_coor=	'';
+							$consulta_co = $pdo->query("SELECT * FROM  coordinador where id_coordinador =".$val['id_coordinador']);	
+							$co = $consulta_co->fetchAll(PDO::FETCH_OBJ);
+							foreach ($co as $pai){
+								echo $pai->nombre_co; echo "\n"; echo $pai->apellido_co;
+							}
+					
+												
+						?>
+						
+						</td>
 						
 						<td align="center">
-							<a href="edit/edit-curso.php?editId=<?php echo $val['id_curso'];?>" class="text-primary"><i class="fa fa-fw fa-edit"></i> Editar</a> | 
-							<a href="delete/delete-curso.php?delId=<?php echo $val['id_curso'];?>" class="text-danger" onClick="return confirm('Are you sure to delete this user?');"><i class="fa fa-fw fa-trash"></i> Eliminar</a>  | 
-							<a href="estudiante-curso.php?editId=<?php echo $val['id_curso'];?>" class="text-primary"><i class="fas fa-user-plus"></i> Añadir  Estudiante </a> | 
+							<a href="edit/edit-curso.php?editId=<?php echo $val['id_curso'];?>" class="text-primary"><i class="fa fa-fw fa-edit"></i> Editar</a>|<br>
+							<a href="delete/delete-curso.php?delId=<?php echo $val['id_curso'];?>" class="text-danger" onClick="return confirm('Are you sure to delete this user?');"><i class="fa fa-fw fa-trash"></i> Eliminar</a> |<br>
+							<a href="estudiante_curso.php?=<?php echo $val['id_curso'];?> &id_curso=<?php echo $val['id_curso'];?>&id_coordinador=<?php echo $val['id_coordinador'];?>&id_facilitador=<?php echo $val['id_facilitador'];?>&id_rector=<?php echo $val['id_rector'];?>" class="text-primary"><i class="fas fa-user-plus"></i> Añadir  Estudiante </a> 
 						</td>
 
 					</tr>

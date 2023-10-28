@@ -1,5 +1,6 @@
-<?php include_once('../config.php');
-include_once('../navbar.php');
+<?php 
+require_once('../cusuario.php');
+
 if(isset($_REQUEST['editId']) and $_REQUEST['editId']!=""){
 	$row	=	$db->getAllRecords('pais','*',' AND id_pais="'.$_REQUEST['editId'].'"');
 }
@@ -43,7 +44,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 </head>
 
 <body>
-	
+<?php include_once('navbar.php');?>
 	<div class="bg-light border-bottom shadow-sm sticky-top">
 		<div class="container">
 			<header class="blog-header py-1">
@@ -68,20 +69,21 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
 		}
 		?>
 		<div class="card">
-			<div class="card-header"><i class="fa fa-fw fa-plus-circle"></i> <strong>Editar Pais </strong> <a href="../estudiante.php" class="float-right btn btn-dark btn-sm"><i class="fa fa-fw fa-globe"></i> Buscar Estudiante</a></div>
+			<div class="card-header"><i class="fa fa-fw fa-plus-circle"></i> <strong>Editar Pais </strong> <a href="../add/add-pais.php" class="float-right btn btn-dark btn-sm"><i class="fa fa-fw fa-globe"></i> Regresar</a></div>
 			<div class="card-body">
 				
 				<div class="col-sm-6">
 					<h5 class="card-title">Todos los campos con  <span class="text-danger">*</span> son obligatorios!</h5>
 					<form method="post">
 						<div class="form-group">
+							
 							<label>Nombre de Pais <span class="text-danger">*</span></label>
 							<input type="text" name="nombre_pais" id="nombre_pais" class="form-control" value="<?php echo $row[0]['nombre_pais']; ?>" placeholder="Ingresa Nombre de Pais" required>
 						</div>
 					
 						<div class="form-group">
 							<input type="hidden" name="editId" id="editId" value="<?php echo $_REQUEST['editId']?>">
-							<button type="submit" name="submit" value="submit" id="submit" class="btn btn-primary"><i class="fa fa-fw fa-edit"></i> Editar Pais</button>
+							<button type="submit" name="submit" value="submit" id="submit" class="btn btn-primary"><i class="fa fa-fw fa-edit"></i> Guardar</button>
 						</div>
 					</form>
 				</div>
@@ -94,4 +96,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit']!=""){
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
     
 </body>
+<footer>
+<?php include_once('../footer.php');	?>
+</footer>
 </html>

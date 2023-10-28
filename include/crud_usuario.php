@@ -1,6 +1,6 @@
 <?php 
-	require_once('conexion.php');
-	require_once('usuario.php');
+	require_once('include/conexion.php');
+	require_once('include/usuario.php');
 	class CrudUsuario{
 
 		public function __construct(){}
@@ -28,16 +28,16 @@
 				$registro=$select->fetch();
 				$usuario=new Usuario();
 
-				//verifica si la clave es conrrecta
+				//verifica si la clave es correcta
 				if (password_verify($clave, $registro['clave'])) {				
 					//si es correcta, asigna los valores que trae desde la base de datos
 					$usuario->setId($registro['usuario']);
-					$usuario->setNombre($registro['nombre']." ".$registro['apellidos']);
+					$usuario->setNombre($registro['nombre']." ".$registro['apellido']);
 					$usuario->setClave($registro['clave']);
-					$usuario->setTipo($registro['tipo']);
+					//$usuario->setTipo($registro['tipo']);
 				}
 				else{
-					echo "<br>Clave incorrecta<br>";
+					echo "<br> <b>Clave incorrecta </b> <br>";
 					return null;
 				}	
 			
