@@ -81,8 +81,8 @@ $qc = new QRcode();
 $qc->TEXT($estudiante."\n".$cedula."\n".$curso); 
 
 // render QR code
-$qc->QRCODE(400,"C:/xampp/htdocs/mariano_certificado/codigos_QR/qr_$estudiantecert.png");
-
+//$qc->QRCODE(400,"C:/xampp/htdocs/mariano_certificado/codigos_QR/qr_$estudiantecert.png");
+$qc->QRCODE(400,"/var/www/html/certificado/codigos_QR/qr_$estudiantecert.png");
 //-------------------------------------------------------------------
 
 // Crear instancia FPDF
@@ -197,7 +197,8 @@ $pdf->Ln();
 $contenido_pdf =$pdf->Output('S'); // 'S' significa que se generará en una cadena
 
 // Ruta de la carpeta de destino donde quieres guardar el PDF
-$carpeta_destino = "C:/xampp/htdocs/mariano_certificado/certificados/";
+//$carpeta_destino = "C:/xampp/htdocs/mariano_certificado/certificados/";
+$carpeta_destino = "/var/www/html/certificado/certificados/";
 
 
 // Guardar el PDF en la carpeta de destino
